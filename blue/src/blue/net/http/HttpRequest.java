@@ -327,10 +327,13 @@ public class HttpRequest {
 		// return stream
 		try {
 			stream = conn.getInputStream();
-			Map<String,List<String>> header = ((MessageHeader)ClassUtils.getField(conn, "responses")).getHeaders();
-			for(Entry<String, List<String>> hdr:header.entrySet()){
-				if(hdr.getKey() != null && hdr.getKey().equalsIgnoreCase("Set-Cookie")){
-					cookies.set(hdr.getValue());
+			MessageHeader respHeaders = ((MessageHeader)ClassUtils.getField(conn, "responses"));
+			if(respHeaders != null){
+				Map<String,List<String>> header = respHeaders.getHeaders();
+				for(Entry<String, List<String>> hdr:header.entrySet()){
+					if(hdr.getKey() != null && hdr.getKey().equalsIgnoreCase("Set-Cookie")){
+						cookies.set(hdr.getValue());
+					}
 				}
 			}
 //			cookies.update();
